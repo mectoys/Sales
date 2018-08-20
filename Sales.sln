@@ -7,7 +7,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sales.Android", "Sales\Sale
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sales.UWP", "Sales\Sales.UWP\Sales.UWP.csproj", "{B658B238-FDAF-452F-B2EC-A01EC7B5C05B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sales", "Sales\Sales\Sales.csproj", "{72D8CD96-33D1-45E9-8CEC-6F7BEA3C7461}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Sales", "Sales\Sales\Sales.csproj", "{72D8CD96-33D1-45E9-8CEC-6F7BEA3C7461}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sales.Backend", "Sales.Backend\Sales.Backend.csproj", "{C8E3C32E-FA15-4B39-A7C8-5DE981B4A907}"
 EndProject
