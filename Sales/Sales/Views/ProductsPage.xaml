@@ -5,10 +5,12 @@
              BindingContext="{Binding Main,Source={StaticResource Locator}}">
      
     <ContentPage.Content>
-        <StackLayout>
-            <Label Text="Welcome to Xamarin.Forms!"
-                VerticalOptions="CenterAndExpand" 
-                HorizontalOptions="CenterAndExpand" />
+        <StackLayout
+            BindingContext="{Binding Products}" >
+            <ListView
+                ItemsSource="{Binding Products}">
+                
+            </ListView>
         </StackLayout>
     </ContentPage.Content>
 </ContentPage>
