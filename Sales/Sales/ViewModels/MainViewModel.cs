@@ -12,7 +12,6 @@ namespace Sales.ViewModels
         {
             this.Products = new ProductsViewModel();
         }
-
         
     }
 }

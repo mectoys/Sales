@@ -16,6 +16,11 @@ using System.ComponentModel.DataAnnotations;
 
         public bool IsAvailable { get; set; }
 
-        public DateTime PublishOn { get; set; }
+         public DateTime PublishOn { get; set; }
+
+        public override string ToString()
+        {
+            return this.Description; 
+        }
     }
 }
