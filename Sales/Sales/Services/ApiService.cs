@@ -7,13 +7,40 @@ namespace Sales.Services
     using System.Net.Http;
     using System.Threading.Tasks;
     using Newtonsoft.Json;
+    using Plugin.Connectivity;
     using Sales.Common;
 
     public class ApiService
     {
-        //crear un metodo generico para traer cualquier lista
-        //T es clase generica.
-        public async Task<Response> GetList<T>(string urlBase, string prefix, string controller)
+        public async Task<Response> CheckConnection()
+        {
+            if (!CrossConnectivity.Current.IsConnected)
+            {
+                return new Response
+                {
+                    IsSuccess = false,
+                    Message = "Please Turn on your Internet setting",
+                };
+            }
+            //metodo que hace ping 
+            var isReachable = await CrossConnectivity.Current.IsRemoteReachable("google.com");
+            if (!isReachable)
+            {
+                return new Response
+                {
+                    IsSuccess = false,
+                    Message = "No Internet connection",
+                };
+            }
+
+            return new Response
+            {
+                IsSuccess = true,
+            };
+        }
+            //crear un metodo generico para traer cualquier lista
+            //T es clase generica.
+            public async Task<Response> GetList<T>(string urlBase, string prefix, string controller)
         {
             try
             {

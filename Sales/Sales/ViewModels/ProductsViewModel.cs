@@ -41,9 +41,17 @@ namespace Sales.ViewModels
         private async void LoadProducts()
         {
             this.IsRefreshing = true;
+            //revisa si hay o no conexion a internet
+            var connection = await this.apiService.CheckConnection();
+            if (!connection.IsSuccess)
+            {
+                this.IsRefreshing = false;
+                await Application.Current.MainPage.DisplayAlert("Error", connection.Message, "Acept");
+                return;
+            }
             //agregar al diccionarion de recursos ap.xaml la direccion URL por seguridad
             var url = Application.Current.Resources["UrlAPI"].ToString();
-            var response = await this.apiService.GetList<Product>("https://salesapimectoys.azurewebsites.net", "/api", "/Products");
+            var response = await this.apiService.GetList<Product>(url, "/api", "/Products");
             //aca devolvio una lista de obj. response
           if (!response.IsSuccess)
             {
