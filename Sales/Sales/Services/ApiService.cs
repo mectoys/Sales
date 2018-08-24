@@ -9,6 +9,7 @@ namespace Sales.Services
     using Newtonsoft.Json;
     using Plugin.Connectivity;
     using Sales.Common;
+    using Sales.Helpers;
 
     public class ApiService
     {
@@ -19,7 +20,7 @@ namespace Sales.Services
                 return new Response
                 {
                     IsSuccess = false,
-                    Message = "Please Turn on your Internet setting",
+                    Message = Languages.TurnOnInternet,
                 };
             }
             //metodo que hace ping 
@@ -29,7 +30,7 @@ namespace Sales.Services
                 return new Response
                 {
                     IsSuccess = false,
-                    Message = "No Internet connection",
+                    Message = Languages.NoInternet,
                 };
             }
 

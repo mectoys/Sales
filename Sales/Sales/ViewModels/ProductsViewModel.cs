@@ -3,13 +3,15 @@
 
 namespace Sales.ViewModels
 {
-    using GalaSoft.MvvmLight.Command;
-    using Sales.Common.Models;
-    using Services;
     using System;
     using System.Collections.Generic;
     using System.Collections.ObjectModel;
     using System.Windows.Input;
+    using GalaSoft.MvvmLight.Command;
+    using Sales.Common.Models;
+    using Sales.Helpers;
+    using Services;
+  
     using Xamarin.Forms;
 
     public class ProductsViewModel:BaseViewModel
@@ -46,17 +48,20 @@ namespace Sales.ViewModels
             if (!connection.IsSuccess)
             {
                 this.IsRefreshing = false;
-                await Application.Current.MainPage.DisplayAlert("Error", connection.Message, "Acept");
+                await Application.Current.MainPage.DisplayAlert(Languages.Error, connection.Message, Languages.Accept);
                 return;
             }
             //agregar al diccionarion de recursos ap.xaml la direccion URL por seguridad
             var url = Application.Current.Resources["UrlAPI"].ToString();
-            var response = await this.apiService.GetList<Product>(url, "/api", "/Products");
+            var prefix = Application.Current.Resources["UrlPrefix"].ToString();
+            var controller = Application.Current.Resources["UrlProductsController"].ToString();
+
+            var response = await this.apiService.GetList<Product>(url, prefix, controller);
             //aca devolvio una lista de obj. response
           if (!response.IsSuccess)
             {
                 this.IsRefreshing = false;
-                await Application.Current.MainPage.DisplayAlert("Error",response.Message,"Acept");
+                await Application.Current.MainPage.DisplayAlert(Languages.Error,response.Message,Languages.Accept);
                 return;
             }
             var list = (List<Product>)response.Result;
