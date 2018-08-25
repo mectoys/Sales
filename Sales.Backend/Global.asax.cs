@@ -13,8 +13,10 @@ namespace Sales.Backend
     {
         protected void Application_Start()
         {
+            //cada vez que arranque revisame los cambios y actualizalo
             Database.SetInitializer(
                 new MigrateDatabaseToLatestVersion<Models.LocalDataContext, Migrations.Configuration>());
+
             AreaRegistration.RegisterAllAreas();
             FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
             RouteConfig.RegisterRoutes(RouteTable.Routes);

@@ -11,7 +11,8 @@ namespace Sales.Domain.Models
         {
 
         }
-
-        public System.Data.Entity.DbSet<Sales.Common.Models.Product> Products { get; set; }
+        //hay un modelo product usted me lo va a mapear en la bd y se llama products
+        //mapea la clase product en la bD  tabla products
+        public DbSet<Product> Products { get; set; }
     }
 }
