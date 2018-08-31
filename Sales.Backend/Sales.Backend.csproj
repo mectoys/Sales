@@ -216,6 +216,12 @@
     <Content Include="Content\bootstrap-theme.min.css" />
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
+    <Content Include="Content\Products\coleccion1.jpg" />
+    <Content Include="Content\Products\FB_IMG_15331844102695564.jpg" />
+    <Content Include="Content\Products\FB_IMG_15331844292294204.jpg" />
+    <Content Include="Content\Products\Gatita Vendedora.jpg" />
+    <Content Include="Content\Products\Sandra Colombia 20180330_111304.jpg" />
+    <Content Include="Content\Products\uno.jpg" />
     <Content Include="favicon.ico" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
@@ -279,7 +285,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Content\Products\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff2" />
