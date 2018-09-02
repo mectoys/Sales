@@ -14,6 +14,8 @@ namespace Sales.ViewModels
 
         public ProductsViewModel Products { get; set; }
 
+        public AddProductViewModel AddProduct { get; set; }
+
         public MainViewModel()
         {
             this.Products = new ProductsViewModel();
@@ -31,6 +33,7 @@ namespace Sales.ViewModels
 
         private async void GoToAddProduct()
         {
+            this.AddProduct = new AddProductViewModel();
             await Application.Current.MainPage.Navigation.PushAsync(new AddProductPage());
         }
     }
