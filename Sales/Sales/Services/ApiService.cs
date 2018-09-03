@@ -5,6 +5,7 @@ namespace Sales.Services
     using System;
     using System.Collections.Generic;
     using System.Net.Http;
+    using System.Text;
     using System.Threading.Tasks;
     using Newtonsoft.Json;
     using Plugin.Connectivity;
@@ -82,5 +83,61 @@ namespace Sales.Services
                 };
             }
         }
+
+        //metodo generico de hacer un post de cualquier cosa(grabar en la BD)
+        public async Task<Response> Post<T>(string urlBase, string prefix, string controller, T model)
+        {
+            //post no es diferente al get, son muy parecidos
+
+            //hay que hacer un cambio serializar el modelo T y convertirlo en un Content <T model>
+            try
+            {
+                //video 23
+                //coje el objeto y lo convierte en String
+                var request = JsonConvert.SerializeObject(model);
+                //hay que codificarlo para que reconosca las tildes y demas simbolos del idioma
+                //UTF8 permite las tildes , viñetas , si es idioma arabe se debe utilizar otro.
+                var content = new StringContent(request, Encoding.UTF8, "application/json");
+                //sirve para hacer la conexion
+                var cliente = new HttpClient();
+                //cargar a la direccion
+                cliente.BaseAddress = new Uri(urlBase);
+                //concatenera el prefijo y el controlador
+                //string.Format("{0}{1}", prefix, controller);
+                var url = $"{prefix}{controller}";
+                //realizamos un envio de la info o POST
+                var response = await cliente.PostAsync(url,content);
+                //leer la respuesta
+                var answer = await response.Content.ReadAsStringAsync();
+                //todo el json es answer
+                if (!response.IsSuccessStatusCode)
+                {
+                    return new Response
+                    {
+                        IsSuccess = false,
+                        Message = answer,
+                    };
+                }
+                //deserealizo  objeto T como objeto
+                //envio los datos si el ID del producto porque la BD lo genera automaticamente
+                //luego me lo devuelve con el ID generado 
+                //String a objeto
+                var obj = JsonConvert.DeserializeObject<T>(answer);
+                return new Response
+                {
+                    IsSuccess = true,
+                    Result = obj,
+                };
+            }
+            catch (Exception ex)
+            {
+                return new Response
+                {
+                    IsSuccess = false,
+                    Message = ex.Message,
+                };
+            }
+        }
     }
 }
+
