@@ -4,6 +4,7 @@ namespace Sales.Common.Models
 
 using System;
 using System.ComponentModel.DataAnnotations;
+    using System.ComponentModel.DataAnnotations.Schema;
 
     public class Product
     {
@@ -33,6 +34,10 @@ using System.ComponentModel.DataAnnotations;
         [DataType(DataType.Date)]
         public DateTime PublishOn { get; set; }
 
+        //NotMapped le dice al Entity framework que no lo mapee a la BD
+        [NotMapped]
+        public byte[] ImageArray { get; set; }
+
         public string ImageFullPath
         {
             get
@@ -42,7 +47,11 @@ using System.ComponentModel.DataAnnotations;
                     return "noproduct";
                 }
 
-                return $"https://salesbackendmectoys.azurewebsites.net/{this.ImagePath.Substring(1)}";
+                //funciona para el movil si se toma o se agrega pero para la parte web no
+                return $"https://salesapimectoys.azurewebsites.net/{this.ImagePath.Substring(1)}";
+
+                //si se restablece https://salesbackendmectoys.azurewebsites.net/ si funciona para la parte
+                //web pero cuando se toma foto del mobil no se va a ver
             }
 
         }
