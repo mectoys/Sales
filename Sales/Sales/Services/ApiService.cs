@@ -138,6 +138,50 @@ namespace Sales.Services
                 };
             }
         }
+
+        //metodo no generico para la eliminación del registro
+        public async Task<Response> Delete(string urlBase, string prefix, string controller, int id)
+        {
+            try
+            {
+                //video 28
+                //sirve para hacer la conexion
+                var cliente = new HttpClient();
+                //cargasrla direccion
+                cliente.BaseAddress = new Uri(urlBase);
+                //concatenera el prefijo y el controlador
+                //string.Format("{0}{1}", prefix, controller);
+                //concantenar el id 
+                var url = $"{prefix}{controller}/{id}";
+                var response = await cliente.DeleteAsync(url);
+                //leer la respuesta
+                var answer = await response.Content.ReadAsStringAsync();
+                //todo el json es answer
+                if (!response.IsSuccessStatusCode)
+                {
+                    return new Response
+                    {
+                        IsSuccess = false,
+                        Message = answer,
+                    };
+                }
+                               
+                return new Response
+                {
+                    IsSuccess = true,
+                    
+                };
+            }
+            catch (Exception ex)
+            {
+                return new Response
+                {
+                    IsSuccess = false,
+                    Message = ex.Message,
+                };
+            }
+        }
+
     }
 }
 

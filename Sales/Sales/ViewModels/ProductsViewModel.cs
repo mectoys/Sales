@@ -6,6 +6,7 @@ namespace Sales.ViewModels
     using System;
     using System.Collections.Generic;
     using System.Collections.ObjectModel;
+    using System.Linq;
     using System.Windows.Input;
     using GalaSoft.MvvmLight.Command;
     using Sales.Common.Models;
@@ -20,13 +21,17 @@ namespace Sales.ViewModels
         private ApiService apiService;
         private bool isRefreshing;
 
+        //crear elatributo
+        private ObservableCollection<ProductItemViewModel> products;
+
         #endregion
 
         #region Properties
-        //crear elatributo
-        private ObservableCollection<Product> products;
+        //propiedad puvblica para uso en todo el proyecto los valores
+        public List<Product>MyProducts { get; set; }
+
         //aca tiene la lsita de los productos
-        public ObservableCollection<Product> Products
+        public ObservableCollection<ProductItemViewModel> Products
         {
             get { return this.products; }
             set { this.SetValue(ref this.products, value); }
@@ -92,10 +97,45 @@ namespace Sales.ViewModels
                 await Application.Current.MainPage.DisplayAlert(Languages.Error, response.Message, Languages.Accept);
                 return;
             }
-            var list = (List<Product>)response.Result;
-            //armamos la obserbable collections
-            this.Products = new ObservableCollection<Product>(list);
+            //creamos un objeto lambda
+            //1 despues que te traiga la lista de productos
+            this.MyProducts = (List<Product>)response.Result;
+            //2 refrescame la lista 
+            this.RefreshList();
             this.IsRefreshing = false;
+        }
+
+        public void RefreshList()
+        {
+            var myListProductItemViewModel = MyProducts.Select(p => new ProductItemViewModel
+            {
+                Description = p.Description,
+                ImageArray = p.ImageArray,
+                ImagePath = p.ImagePath,
+                IsAvailable = p.IsAvailable,
+                Price = p.Price,
+                ProductId = p.ProductId,
+                PublishOn = p.PublishOn,
+                Remarks = p.Remarks,
+
+            });
+            //armamos la obserbable collections y la ordenamos con LINQ
+            this.Products = new ObservableCollection<ProductItemViewModel>(
+                myListProductItemViewModel.OrderBy(p => p.Description));
+            
+
+            /*
+            var list = (List<Product>)response.Result;
+            var myList = new List<ProductItemViewModel>();
+            foreach (var item in list)
+            {
+                myList.Add(new ProductItemViewModel
+                    {
+
+                });
+            }
+            */
+
         }
         #endregion
 

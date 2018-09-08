@@ -209,13 +209,16 @@ namespace Sales.ViewModels
                     Languages.Accept);
                 return;
             }
-            //casteamos de la clase products
+            //casteamos de la clase products y nos devuelve el servicio
             var newProduct = (Product)response.Result;
             //adicionarle a ese producto a la obserbable collections
             //llamado el patron SIGLETON
-            var viewModel = ProductsViewModel.GetInstance();
+            var productsviewModel = ProductsViewModel.GetInstance();
+            productsviewModel.MyProducts.Add(newProduct);
+            //invocamos el refresco para la lista ordenada
+            productsviewModel.RefreshList();
             //VIEWMODEL tiene la coleccion de productos y se debe adicionar
-            viewModel.Products.Add(newProduct);
+           
             
             //devolvernos al listado  por codigo un back 
             this.IsRunning = false;
