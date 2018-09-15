@@ -12,6 +12,7 @@ namespace Sales.Backend.Controllers
     using Sales.Backend.Helpers;
     using System;
 
+    [Authorize]
     public class ProductsController : Controller
     {
         //db es un atributo

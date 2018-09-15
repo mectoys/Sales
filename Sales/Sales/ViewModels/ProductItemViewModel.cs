@@ -1,13 +1,15 @@
 ﻿
 namespace Sales.ViewModels
 {
+    using System;
     using System.Linq;
     using System.Windows.Input;
     using GalaSoft.MvvmLight.Command;
     using Sales.Common.Models;
     using Sales.Helpers;
     using Services;
-   
+    using Views;
+
     using Xamarin.Forms;
 
     public class ProductItemViewModel : Product
@@ -28,11 +30,28 @@ namespace Sales.ViewModels
         #endregion
 
         #region Commands
+        public ICommand  EditProductCommand
+        {
+            get
+            {
+                return new RelayCommand(EditProduct);
+            }
+        }
+
+        private async void EditProduct()
+        {
+            //Creamos unsiglento de la MainViewModel
+            //crear la instacia y ligar con la mainviewmodel
+            MainViewModel.GetInstance().EditProduct = new EditProductViewModel(this);
+
+            await Application.Current.MainPage.Navigation.PushAsync(new EditProductPage());
+        }
 
         public ICommand DeleteProductCommand {
             get {
                 return new RelayCommand(DeleteProduct);
-            } }
+            }
+        }
 
         private  async void DeleteProduct()
         {
@@ -67,12 +86,12 @@ namespace Sales.ViewModels
             //refrescar la lista
             //llamar el singleton
             var productsViewModel = ProductsViewModel.GetInstance();
-            var deletedProduct = productsViewModel.Products.Where(p => p.ProductId == this.ProductId).FirstOrDefault();
+            var deletedProduct = productsViewModel.MyProducts.Where(p => p.ProductId == this.ProductId).FirstOrDefault();
             if (deletedProduct !=null)
             {
-                productsViewModel.Products.Remove(deletedProduct);
+                productsViewModel.MyProducts.Remove(deletedProduct);
             }
-
+            productsViewModel.RefreshList();
         }
         #endregion
     }

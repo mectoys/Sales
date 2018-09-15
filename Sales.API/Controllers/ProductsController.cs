@@ -15,6 +15,7 @@ namespace Sales.API.Controllers
     using Domain.Models;
     using Sales.API.Helpers;
 
+    [Authorize]
     public class ProductsController : ApiController
     {
         private DataContext db = new DataContext();
@@ -44,6 +45,7 @@ namespace Sales.API.Controllers
         [ResponseType(typeof(void))]
         public async Task<IHttpActionResult> PutProduct(int id, Product product)
         {
+           
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
@@ -52,6 +54,26 @@ namespace Sales.API.Controllers
             if (id != product.ProductId)
             {
                 return BadRequest();
+            }
+
+            //Actualiza el producto
+            //cambiar la imagen en la BD
+            //preparamos para guardar la imagen
+            if (product.ImageArray != null && product.ImageArray.Length > 0)
+            {
+                //cogemos la image arrray y la convertimos en un stream
+                var stream = new MemoryStream(product.ImageArray);
+                //Guid codigo alfanumerico que no se repite
+                var guid = Guid.NewGuid().ToString();
+                var file = $"{guid}.jpg";
+                var folder = "~/Content/Products";
+                var fullPath = $"{folder}/{file}";
+                var response = FilesHelper.UploadPhoto(stream, folder, file);
+
+                if (response)
+                {
+                    product.ImagePath = fullPath;
+                }
             }
 
             this.db.Entry(product).State = EntityState.Modified;
@@ -71,8 +93,8 @@ namespace Sales.API.Controllers
                     throw;
                 }
             }
-
-            return StatusCode(HttpStatusCode.NoContent);
+            //DevuelVa el producto como quedo en la BD  
+            return Ok(product);
         }
 
         // POST: api/Products

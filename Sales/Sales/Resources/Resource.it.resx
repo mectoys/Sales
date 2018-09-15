@@ -192,4 +192,58 @@
   <data name="Confirm" xml:space="preserve">
     <value>Conferma</value>
   </data>
+  <data name="EditProduct" xml:space="preserve">
+    <value>Modifica Prodotto</value>
+  </data>
+  <data name="IsAvailable" xml:space="preserve">
+    <value>è disponibile</value>
+  </data>
+  <data name="Search" xml:space="preserve">
+    <value>Cerca…</value>
+  </data>
+  <data name="Login" xml:space="preserve">
+    <value>Login</value>
+  </data>
+  <data name="EMail" xml:space="preserve">
+    <value>Email</value>
+  </data>
+  <data name="EmailPlaceHolder" xml:space="preserve">
+    <value>Inserisci qui il tuo indirizzo email...</value>
+  </data>
+  <data name="Password" xml:space="preserve">
+    <value>Password</value>
+  </data>
+  <data name="PasswordPlaceHolder" xml:space="preserve">
+    <value>Inserisci la password</value>
+  </data>
+  <data name="Rememberme" xml:space="preserve">
+    <value>Ricordami</value>
+  </data>
+  <data name="Forgot" xml:space="preserve">
+    <value>Hai dimenticato la password?</value>
+  </data>
+  <data name="Register" xml:space="preserve">
+    <value>Nuovo utente</value>
+  </data>
+  <data name="EmailValidation" xml:space="preserve">
+    <value>Devi inserire la tua email</value>
+  </data>
+  <data name="PasswordValidation" xml:space="preserve">
+    <value>Devi inserire la tua password</value>
+  </data>
+  <data name="SomethingWrong" xml:space="preserve">
+    <value>L'e-mail o la password non sono validi.!</value>
+  </data>
+  <data name="Menu" xml:space="preserve">
+    <value>Menù</value>
+  </data>
+  <data name="About" xml:space="preserve">
+    <value>Informazioni</value>
+  </data>
+  <data name="Setup" xml:space="preserve">
+    <value>Impostazione</value>
+  </data>
+  <data name="Exit" xml:space="preserve">
+    <value>Chiudi sessione</value>
+  </data>
 </root>

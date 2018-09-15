@@ -6,14 +6,18 @@ using Xamarin.Forms.Xaml;
 namespace Sales
 {
     using Views;
+    using ViewModels;
 
     public partial class App : Application
     {
+        
         public App()
         {
             InitializeComponent();
+            //antes de mostrar el apgo ahcemos una instancia de la mainviewmodel.
+            MainViewModel.GetInstance().Login = new LoginViewModel();
 
-            MainPage = new NavigationPage(new ProductsPage());
+            MainPage = new LoginPage(); //NavigationPage(new ProductsPage());
         }
 
         protected override void OnStart()

@@ -18,6 +18,8 @@ namespace Sales.ViewModels
     public class ProductsViewModel:BaseViewModel
     {
         #region Attributes
+
+        private string filter;
         private ApiService apiService;
         private bool isRefreshing;
 
@@ -27,6 +29,20 @@ namespace Sales.ViewModels
         #endregion
 
         #region Properties
+
+
+        public string Filter
+        {
+            get { return this.filter; }
+            set
+            {
+
+                this.filter = value;
+                this.RefreshList();
+
+            }
+        }
+
         //propiedad puvblica para uso en todo el proyecto los valores
         public List<Product>MyProducts { get; set; }
 
@@ -107,21 +123,47 @@ namespace Sales.ViewModels
 
         public void RefreshList()
         {
-            var myListProductItemViewModel = MyProducts.Select(p => new ProductItemViewModel
-            {
-                Description = p.Description,
-                ImageArray = p.ImageArray,
-                ImagePath = p.ImagePath,
-                IsAvailable = p.IsAvailable,
-                Price = p.Price,
-                ProductId = p.ProductId,
-                PublishOn = p.PublishOn,
-                Remarks = p.Remarks,
+              if (string.IsNullOrEmpty(this.Filter))
+              {             
+              
+                var myListProductItemViewModel = this.MyProducts.Select(p => new ProductItemViewModel
+                {
+                    Description = p.Description,
+                    ImageArray = p.ImageArray,
+                    ImagePath = p.ImagePath,
+                    IsAvailable = p.IsAvailable,
+                    Price = p.Price,
+                    ProductId = p.ProductId,
+                    PublishOn = p.PublishOn,
+                    Remarks = p.Remarks,
 
-            });
-            //armamos la obserbable collections y la ordenamos con LINQ
-            this.Products = new ObservableCollection<ProductItemViewModel>(
-                myListProductItemViewModel.OrderBy(p => p.Description));
+                });
+                //armamos la obserbable collections y la ordenamos con LINQ
+                this.Products = new ObservableCollection<ProductItemViewModel>(
+                    myListProductItemViewModel.OrderBy(p => p.Description));
+
+                }
+            else
+            {
+                //expresion lambda video 34 para busqueda en el serach bar
+                //el THIS te dice si es un atributo de clase o no VIDEO 34
+                var myListProductItemViewModel = this.MyProducts.Select(p => new ProductItemViewModel
+                {
+                    Description = p.Description,
+                    ImageArray = p.ImageArray,
+                    ImagePath = p.ImagePath,
+                    IsAvailable = p.IsAvailable,
+                    Price = p.Price,
+                    ProductId = p.ProductId,
+                    PublishOn = p.PublishOn,
+                    Remarks = p.Remarks,
+                }).Where(p => p.Description.ToLower().Contains(this.Filter.ToLower())).ToList();
+
+                //armamos la obserbable collections y la ordenamos con LINQ
+                this.Products = new ObservableCollection<ProductItemViewModel>(
+                    myListProductItemViewModel.OrderBy(p => p.Description));
+            }
+         
             
 
             /*
@@ -140,6 +182,15 @@ namespace Sales.ViewModels
         #endregion
 
         #region Commands
+        public ICommand SearchCommand
+        {
+            get
+            {
+                return new RelayCommand(RefreshList);
+            }
+
+        }
+
         public ICommand RefreshCommand
         {
             get
