@@ -3,24 +3,28 @@
 
 namespace Sales.ViewModels
 {
-    using System;
+    using GalaSoft.MvvmLight.Command;
+    using Common.Models;
+    using Helpers;
+    using Services;
     using System.Collections.Generic;
     using System.Collections.ObjectModel;
     using System.Linq;
     using System.Windows.Input;
-    using GalaSoft.MvvmLight.Command;
-    using Sales.Common.Models;
-    using Sales.Helpers;
-    using Services;
-  
     using Xamarin.Forms;
+    using System;
+    using System.Threading.Tasks;
 
     public class ProductsViewModel:BaseViewModel
     {
         #region Attributes
 
         private string filter;
+
         private ApiService apiService;
+
+        private DataService dataService;
+
         private bool isRefreshing;
 
         //crear elatributo
@@ -30,16 +34,13 @@ namespace Sales.ViewModels
 
         #region Properties
 
-
         public string Filter
         {
             get { return this.filter; }
             set
             {
-
                 this.filter = value;
                 this.RefreshList();
-
             }
         }
 
@@ -53,7 +54,6 @@ namespace Sales.ViewModels
             set { this.SetValue(ref this.products, value); }
         } 
      
-
         public bool IsRefreshing
         {
             get { return this.isRefreshing; }
@@ -68,6 +68,8 @@ namespace Sales.ViewModels
             //la primera vez que lo llamamos debemos instanciar para que quede en memoria por ser STATIC
             instance = this;
             this.apiService = new ApiService();
+            //Iniciar los servicios para SQLITE
+            this.dataService = new DataService();
             this.LoadProducts();
         }
         #endregion
@@ -94,31 +96,66 @@ namespace Sales.ViewModels
             this.IsRefreshing = true;
             //revisa si hay o no conexion a internet
             var connection = await this.apiService.CheckConnection();
-            if (!connection.IsSuccess)
+            if (connection.IsSuccess)
+            {
+                var answer = await this.LoadProductsFromAPI();
+                if (answer)
+                {
+                    //guardar los productos en la sqlite
+                    this.SaveProductsToDB();
+                }
+             }
+            else
+            {
+                //Cargar productos del sqlite
+                await this.LoadProductsFromDB();
+            }
+            //si el objeto myproduct es null o no tiene registros
+            if (this.MyProducts==null || this.MyProducts.Count==0)
             {
                 this.IsRefreshing = false;
-                await Application.Current.MainPage.DisplayAlert(Languages.Error, connection.Message, Languages.Accept);
+                await Application.Current.MainPage.DisplayAlert(Languages.Error, Languages.NoProductsMessage, Languages.Accept);
                 return;
             }
+            //2 refrescame la lista 
+            this.RefreshList();
+            this.IsRefreshing = false;
+        }
+           
+        private async Task LoadProductsFromDB()
+        {
+            //trae los prod. de la BD
+            this.MyProducts = await this.dataService.GetAllProducts();
+        }
+
+        private async Task  SaveProductsToDB()
+        {
+            //elimina
+            await this.dataService.DeleteAllProducts();
+            //inserta el modelo del atributo 
+            this.dataService.Insert(this.MyProducts);
+
+        }
+
+        private async Task<bool> LoadProductsFromAPI()
+        {
             //agregar al diccionarion de recursos ap.xaml la direccion URL por seguridad
             var url = Application.Current.Resources["UrlAPI"].ToString();
             var prefix = Application.Current.Resources["UrlPrefix"].ToString();
             var controller = Application.Current.Resources["UrlProductsController"].ToString();
 
-            var response = await this.apiService.GetList<Product>(url, prefix, controller);
+            var response = await this.apiService.GetList<Product>(url, prefix, controller, Settings.TokkenType, Settings.AccessToken);
             //aca devolvio una lista de obj. response
             if (!response.IsSuccess)
             {
-                this.IsRefreshing = false;
-                await Application.Current.MainPage.DisplayAlert(Languages.Error, response.Message, Languages.Accept);
-                return;
+               // this.IsRefreshing = false;
+                //await Application.Current.MainPage.DisplayAlert(Languages.Error, response.Message, Languages.Accept);
+                return false;
             }
             //creamos un objeto lambda
             //1 despues que te traiga la lista de productos
             this.MyProducts = (List<Product>)response.Result;
-            //2 refrescame la lista 
-            this.RefreshList();
-            this.IsRefreshing = false;
+            return true;
         }
 
         public void RefreshList()

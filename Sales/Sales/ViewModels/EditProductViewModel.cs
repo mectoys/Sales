@@ -113,7 +113,7 @@ namespace Sales.ViewModels
             var prefix = Application.Current.Resources["UrlPrefix"].ToString();
             var controller = Application.Current.Resources["UrlProductsController"].ToString();
 
-            var response = await this.apiService.Delete(url, prefix, controller, this.Product.ProductId);
+            var response = await this.apiService.Delete(url, prefix, controller, this.Product.ProductId, Settings.TokkenType, Settings.AccessToken);
             //aca devolvio una lista de obj. response
             if (!response.IsSuccess)
             {
@@ -248,7 +248,7 @@ namespace Sales.ViewModels
             var controller = Application.Current.Resources["UrlProductsController"].ToString();
             //NOTA el VS simplifica el nombre Post y no se coloca en la notacion diamante Product
             //pues ya esta dentro de los parametros.
-            var response = await this.apiService.Put(url, prefix, controller,this.Product,this.product.ProductId);
+            var response = await this.apiService.Put(url, prefix, controller,this.Product,this.product.ProductId, Settings.TokkenType, Settings.AccessToken);
             //preguntar si lo grabo
             if (!response.IsSuccess)
             {
@@ -286,7 +286,7 @@ namespace Sales.ViewModels
             this.IsRunning = false;
             this.IsEnabled = true;
             //hacer un desapilamiento entre las PAGE (para regresar a listado de productos PAGE)
-            await Application.Current.MainPage.Navigation.PopAsync();
+             await App.Navigator.PopAsync();
         }
         #endregion
     }

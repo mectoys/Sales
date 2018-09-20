@@ -196,7 +196,7 @@ namespace Sales.ViewModels
             var controller = Application.Current.Resources["UrlProductsController"].ToString();
             //NOTA el VS simplifica el nombre Post y no se coloca en la notacion diamante Product
             //pues ya esta dentro de los parametros.
-            var response = await this.apiService.Post(url, prefix, controller,product);
+            var response = await this.apiService.Post(url, prefix, controller,product, Settings.TokkenType, Settings.AccessToken);
             //preguntar si lo grabo
             if (!response.IsSuccess)
             {
@@ -224,7 +224,8 @@ namespace Sales.ViewModels
             this.IsRunning = false;
             this.IsEnabled = true;
             //hacer un desapilamiento entre las PAGE (para regresar a listado de productos PAGE)
-            await Application.Current.MainPage.Navigation.PopAsync();
+            // await Application.Current.MainPage.Navigation.PopAsync();
+            await App.Navigator.PopAsync();
         }
         #endregion
     }

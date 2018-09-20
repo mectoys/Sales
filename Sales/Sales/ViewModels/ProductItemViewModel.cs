@@ -44,7 +44,7 @@ namespace Sales.ViewModels
             //crear la instacia y ligar con la mainviewmodel
             MainViewModel.GetInstance().EditProduct = new EditProductViewModel(this);
 
-            await Application.Current.MainPage.Navigation.PushAsync(new EditProductPage());
+            await  App.Navigator.PushAsync(new EditProductPage());
         }
 
         public ICommand DeleteProductCommand {
@@ -76,7 +76,7 @@ namespace Sales.ViewModels
             var prefix = Application.Current.Resources["UrlPrefix"].ToString();
             var controller = Application.Current.Resources["UrlProductsController"].ToString();
 
-            var response = await this.apiService.Delete(url, prefix, controller,this.ProductId);
+            var response = await this.apiService.Delete(url, prefix, controller,this.ProductId, Settings.TokkenType, Settings.AccessToken);
             //aca devolvio una lista de obj. response
             if (!response.IsSuccess)
             {                
