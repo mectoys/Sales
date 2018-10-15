@@ -1,11 +1,12 @@
 ﻿
 namespace Sales.ViewModels
 {
+    using System;
     using System.Windows.Input;
     using GalaSoft.MvvmLight.Command;
     using Helpers;
     using Sales.Views;
-    using Services;   
+    using Services;
     using Xamarin.Forms;
 
 
@@ -54,6 +55,20 @@ namespace Sales.ViewModels
         #endregion
 
         #region Commands
+        public ICommand RegisterCommand {
+            get
+            { return new RelayCommand(Register); }
+        }
+
+        private async void Register()
+        {
+            //Cargar de la register viewmodel
+            MainViewModel.GetInstance().Register = new RegisterViewModel();
+            //mostrar la page
+            await  Application.Current.MainPage.Navigation.PushAsync(new RegisterPage());
+
+        }
+
         public ICommand LoginCommand
         {
             get
