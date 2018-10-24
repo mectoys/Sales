@@ -44,8 +44,7 @@ namespace Sales.API.Controllers
         // PUT: api/Products/5
         [ResponseType(typeof(void))]
         public async Task<IHttpActionResult> PutProduct(int id, Product product)
-        {
-           
+        {           
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
