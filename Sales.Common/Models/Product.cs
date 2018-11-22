@@ -1,8 +1,8 @@
 ﻿
 namespace Sales.Common.Models
 {
-
-using System;
+    using Newtonsoft.Json;
+    using System;
 using System.ComponentModel.DataAnnotations;
     using System.ComponentModel.DataAnnotations.Schema;
 
@@ -10,6 +10,8 @@ using System.ComponentModel.DataAnnotations;
     {
         [Key]
         public int ProductId { get; set; }
+
+        public int CategoryId { get; set; }
 
         [Required]
         //longitud del producto
@@ -33,6 +35,10 @@ using System.ComponentModel.DataAnnotations;
         //para mostrar el dtpicket
         [DataType(DataType.Date)]
         public DateTime PublishOn { get; set; }
+
+        //para que ste campo no sea tenido en cuenta en JSON 
+        [JsonIgnore]
+        public virtual Category Category { get; set; }
 
         //NotMapped le dice al Entity framework que no lo mapee a la BD
         [NotMapped]
